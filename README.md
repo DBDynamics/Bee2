@@ -178,21 +178,9 @@
 
 ---
 
-#### Python SDK(专用USB485转换器)
-
-[![](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/768px-Python.svg.png)](downloads/Bee2-SDK.zip)
+[Python SDK下载](downloads/Bee2-SDK.zip)
   
-
-
-
-
-
-
-
-
 ---
-
-#### SDK接口
 
 ##### Python SDK接口说明
 
@@ -229,6 +217,8 @@ SDK接口分为4类,参数设置set类,参数获取get类,等待信号wait类,�
 | scanDevices() | 扫描在线设备. |
 | saveParameters(id) | 保存参数. |
 | changeID(id, value) | 修改ID.ID范围0-31. |
+
+---
 
 ##### 如何使用Python SDK
 
