@@ -83,15 +83,16 @@
 
 ### 机械尺寸
 
-裸板尺寸
+- 裸板尺寸
 
 ![](images/size0_600.png)
 
-带外壳尺寸
+- 带外壳尺寸
 
 ![](images/size_600.png)
 
-
+- 3D模型
+[下载链接](https://share.feijipan.com/s/uT0nTbyE)
 ---
 
 ### 接口布局
@@ -417,17 +418,12 @@ else
 ---
 
 
-## About DBD
-
+## 关于我们
+---
 DBD is a startup manufacturer of innovative matrix motion technologies, and as a manufacturer and
 developer
 of motor drives, controllers, and systems, DBD is designing its technology with emphasis on
 performance,
 efficiency, reliability, safety and simplicity.
 
-* [Twitter](#)
-* [Facebook](#)
-* [Instagram](#)
-* [Email](#)
-
-© DB Dynamics
+© DBDynamics
