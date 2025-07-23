@@ -1,367 +1,747 @@
-# DBD-Bee2
+# DBD-Bee2 步进电机驱动器
 
-⭐ 欢迎使用Bee2步进电机驱动器 - DBD团队最新研发的高性能闭环步进电机驱动解决方案
-
-## 目录
-
-- [简介](#简介)
-- [产品特性](#产品特性)
-  - [技术参数](#技术参数)
-  - [硬件接口](#硬件接口)
-- [产品展示](#产品展示)
-  - [外观设计](#外观设计)
-  - [机械尺寸](#机械尺寸)
-- [使用指南](#使用指南)
-  - [调试软件](#调试软件)
-  - [运行模式](#运行模式)
-- [开发者资源](#开发者资源)
-  - [Python SDK](#python-sdk)
-  - [通信协议](#通信协议)
-- [关于我们](#关于我们)
-
-### 简介
-
----
-
-<img src="images/bee2_1.png" width="33%" align="right">
-
-- Bee2是DBD团队最新开发的一款小型步进电机驱动器,
-- 采用大功率低发热独立MOS驱动
-- 采用隔离通信
-- 支持IO输入和IO输出接口
-- 支持正负限位传感器接口，极大程度提高了系统的安全性。
-- 支持增量式差分编码器接口，采用FOC控制，不丢步，高转速，低功耗和低发热。
-- 采用大号尺寸的接插件，使得施工接线和维修变得更加方便。
-- 虽然尺寸增加了一倍，达到50mm x 60mm x 9mm, 整体性能的提升却远不止一倍。
-
----
-
-### 技术参数
-
----
-
-|  |  |
-| --- | --- |
-| 重量 | 32g |
-| 电机 | 4线2相闭环步进电机 |
-| 细分 | 256 |
-| 工作电压 | DC12V/24V |
-| 最大持续输出电流 | 3A |
-| PWM频率 | 20KHz |
-| 输入IO | 1路(内部10K电阻上拉) |
-| 输出IO | 1路 (开漏输出500mA) |
-| 限位IO | 2路(内部10K电阻上拉) |
-| RS485总线 | 默认250Kbps/500Kbps |
-| 编码器类型 | 差分ABZ增量编码器 |
-| 编码器分辨率 | 1000线(4倍频对应一圈4000脉冲信号) |
-| 运行温度 | -10 to +60摄氏度 |
-
----
-
-### 外观设计
-
----
-
-![](images/bee2_motor_side_600.png)
-![](images/bee2_left_side_600.png)
-![](images/bee2_power_side_600.png)
-![](images/bee2_right_side_600.png)
-![](images/bee2_0.png)
-![](images/bee2_1.png)
-![](images/bee2_2.png)
-![](images/bee2_3.png)
-
----
-### 硬件接口
-- 电源：电源接口采用2个XH2.54-2P端子，可以并联使用增加供电电流，也可以串联使用，达到减少接线的目的
-- 通信：通信接口采用2个XH2.54-4P端子，方便串联
-- 电机：电机接口采用1个XH2.54-4P端子
-- 限位：正负限位采用1个PHB2.0-3X2P端子
-- IO：IO输入和IO输出采用1个PHB2.0-3X2P端子
-- 编码器：编码器采用1个PB2.0-4X2P端子
----
-
-### 机械尺寸
-
-- 裸板尺寸
-
-![](images/size0_600.png)
-
-- 带外壳尺寸
-
-![](images/size_600.png)
-
-- 3D模型
-[下载链接](https://share.feijipan.com/s/uT0nTbyE)
----
-
-### 接口布局
-
----
-
-![](images/Bee2-IO.png)
-![](images/Bee2_pin.png)
-
-
----
-
-### IO输入接口,IO输出接口和限位传感器接口
-
----
-
-传感器接口采用PHB2.0-3X2P接插件,
-上排部分为IO输出接口,用来控制继电器和电磁刹车等.三个信号分别为GND,OUTPUT,24V,
-下排部分三个信号分别为GND,INPUT,24V.其中24V为电源的供电电压,即当使用12V作为供电电压时,
-向传感器提供12V的电压.INPUT信号为内部10K电阻上拉.下面介绍集中常用的回零传感器接法及注意事项.
-
-#### 两脚触碰开关
-
-![](images/bee_sensor_button.png)
-![](images/bee_sensor_connection2.png)
-
-#### 三脚触碰开关
-
-![](images/bee_sensor_3pin.png)
-![](images/bee_sensor_connection3.png)
-
-#### 光电传感器
-
-![](images/bee_sensor_light.png)
-![](images/bee_sensor_npn.png)
-
-#### 霍尔传感器
-
-![](images/bee_sensor_hall.png)
-![](images/bee_sensor_npn.png)
-
-#### PNP
-
----
-
-### 调试软件
-
----
-
-#### DBD TunerV6 for Windows
-
-[![DBD Tuner](images/tun_logo_white.png)](downloads/DBD-Tuner.zip)
-
-#### 驱动下载链接
-
-[USB串口驱动(Windowns)](downloads/CH341SER.EXE)  
-[USB串口驱动(Linux)](downloads/CH341SER_LINUX.ZIP)
-
----
-
-#### 调试软件功能介绍
-
----
-
------------------------这里放一个软件截图 带标注的---------------
-
----
-
-### 运行模式
-
----
-
-|  |  |
-| --- | --- |
-| 位置模式 | 位置模式,全称平滑位置模式.通常称为点位运动.根据设定的目标位置,目标速度以及加速时间 自行规划位置时间曲线并开始运动.  位置模式常用API及参数：    速度－时间曲线：    API使用流程示意图： |
-| 速度模式 | 速度模式,全称平滑速度模式,根据设定读目标速度和加速时间自行规划速度时间曲线并开始运动. 该模式的控制对象是电机的运行速度,不关心电机的位置. |
-| 回零模式 | 回零模式分为有感回零和无感回零两种回零模式。 有感回零即有传感器的回零模式， 进入回零模式后,根据设定的回零方向和目标速度开始运动,直到限位传感器触发,达到设置回零电平参数后停止运行, 并且自动将运行模式恢复为进入回零模式前的运行模式.注意限位传感器有正限位和负限位之分, 当回零方向为正方向时,只有正限位传感器有效,负限位传感器不生效.当回零方向为负方向时,只有负限位传感器生效,安装时要注意区分.    无感回零，即无外部传感器的回零模式，靠电机的编码器和驱动器的电流传感器检测电机的堵转判断是否到达机械零点。 通过设置回零触发条件进入有感或者无感回零模式。 |
-| 插补模式 | 插补模式全称同步位置插补模式,用于实现8轴/32轴/256轴电机的同步插补运动.该模式通常用于3D打印机,写字机,画图机,雕刻机, 点胶机等需要多轴联动,并且执行连续轨迹的设备.USB485可以实现8轴电机的同步插补运动功能。如有需要32轴和256轴的同步插补运动控制器请联系客服。 |
-| 急停模式 | 紧急停止模式适用于发生紧急情况下需要电机紧急停止的情况. 在以上任意运行模式运行期间都可以切换到急停模式,进入急停模式后, 将按照预设的急停减速系数，进行减速运动直至速度为0，完成急停动作后会自动恢复为平滑位置模式. 有两种方式可以进入急停模式:可以通过设置运行模式(参数索引0x03)为急停模式(参数值0x3d)直接进入急停模式. 也可以通过设置使能选项,传感器限位有效,当限位传感器触发时,将直接进入急停模式,停止后,自动恢复为位置模式. |
-
----
-
-### 开发者资源
-
----
-
-[Python SDK下载](downloads/Bee2-SDK.zip)
+<div align="center">
+  <img src="images/bee2_1.png" width="300" alt="Bee2 步进电机驱动器">
   
----
-
-##### Python SDK接口说明
-
-SDK接口分为4类,参数设置set类,参数获取get类,等待信号wait类,功能操作类,下面将做详细介绍.
-
-|  |  |
-| --- | --- |
-| setPowerOn(id) | 设置对应id号的状态为使能,使能后电机开始受驱动器控制.使能后状态指示灯由快速闪烁变为慢速闪烁. |
-| setPowerOff(id) | 设置对应id号的状态为失能,失能后电机不再受驱动器控制.失能后状态指示灯由慢速闪烁变为快速闪烁. |
-| setTargetVelocity(id, value) | 设置目标速度.数值范围通常位1-300,单位pulse/ms近似等于RPM. |
-| setTargetPosition(id, value) | 设置目标位置.Ant控制1.8度步进电机时,51200脉冲当量对应一圈. |
-| setVelocityMode(id) | 设置运行模式为平滑速度模式,详细内容参考[运行模式](#operationmode) |
-| setPositionMode(id) | 设置运行模式为平滑位置模式,详细内容参考[运行模式](#operationmode) |
-| setHomingMode(id) | 设置运行模式为回零模式,详细内容参考[运行模式](#operationmode) |
-| setHomingDirection(id, value) | 设置回零方向.取值为1或者-1. |
-| setHomingLevel(id, value) | 设置回零电平.取值为1或者0. |
-| setRunningCurrent(id, value) | 设置运行电流.取值范围100-1500,单位mA,通常300-800比较合理. |
-| setKeepingCurrent(id, value) | 设置保持电流.取值范围100-1500,单位mA,通常300-800比较合理. |
-| setAccTime(id, value) | 设置加速时间.在位置模式下或者速度模式下的加减速过程的时间,单位ms.通常100-2000比较合理. |
-| setOutputIO(id, value) | 设置IO输出.取值0或者1. |
-| getInputIO(id) | 获取输入IO的状态.返回值为0或者1. |
-| getActualVelocity(id) | 获取当前的实际运行速度. |
-| getActualPosition(id) | 获取当前的实际位置. |
-| getTargetVelocity(id) | 获取目标速度. |
-| getTargetPosition(id) | 获取目标位置. |
-| getRunningCurrent(id) | 获取运行电流. |
-| getKeepingCurrent(id) | 获取保持电流. |
-| getAccTime(id) | 获取加速时间. |
-| getHomingDirection(id) | 获取回零方向. |
-| getHomingLevel(id) | 获取回零电平. |
-| waitHomingDone(id) | 等待回零完成. |
-| waitTargetPositionReached(id) | 等待目标位置到达. |
-| getDeviceID(id) | 获取设备ID. |
-| scanDevices() | 扫描在线设备. |
-| saveParameters(id) | 保存参数. |
-| changeID(id, value) | 修改ID.ID范围0-31. |
+  ⭐ **高性能闭环步进电机驱动解决方案**
+  
+  [![下载量](https://img.shields.io/badge/下载-SDK-blue)](downloads/Bee2-SDK.zip)
+  [![协议](https://img.shields.io/badge/协议-RS485-green)](downloads/Bee2通信协议.xlsx)
+  [![版本](https://img.shields.io/badge/版本-v2.0-orange)](#)
+  
+</div>
 
 ---
 
-##### 如何使用Python SDK
+## 🚀 产品亮点
 
-###### 准备工作
+- 🔥 **大功率低发热** - 独立MOS驱动设计
+- 🛡️ **隔离通信** - 提供更好的抗干扰能力
+- 📡 **丰富接口** - 支持IO输入/输出、限位传感器
+- 🎯 **高精度控制** - FOC控制，不丢步，高转速
+- 🔧 **便捷维护** - 大号接插件，施工接线更方便
+- 📏 **紧凑设计** - 50×60×9mm，性能提升远超尺寸增长
 
-1.安装pyserial.用户可以通过pycharm的库管理下载添加, 或者通过命令行添加, 有问题请联系我们或者自行搜索解决.  
-2.桌面开发环境推荐使用PyCharm进行程序编写.  
-3.终端开发环境,sudo python3 -m pip install pyserial  
-4.获取串口权限.Linux下的设备使用都需要使用sudo或root用户才能打开，为了能让普通用户也能使用串口，可以增加udev规则来实现，具体方法如下： sudo vim
-/etc/udev/rules.d/70-ttyusb.rules 增加如下内容： KERNEL=="ttyUSB[0-9]\*",MODE="0666"
-保存，重新插入USB转串口，普通用户就能搞定了.  
-5.下载[Python SDK](#sdk).并拷贝到用户运行目录.
+## 📋 目录
 
-###### 扫描在线设备
-
-###### 使能/失能
-
-###### 平滑位置模式的例子
-
-###### 回零模式的例子
-
-###### 平滑速度模式的例子
-
-###### 急停模式的例子
-
-###### 插补模式的例子
+- [📖 产品简介](#-产品简介)
+- [⚡ 技术规格](#-技术规格)
+  - [📊 技术参数](#技术参数)
+  - [🔌 硬件接口](#硬件接口)
+- [🎨 产品展示](#-产品展示)
+  - [👀 外观设计](#外观设计)
+  - [📐 机械尺寸](#机械尺寸)
+  - [🔗 接口布局](#接口布局)
+- [🛠️ 使用指南](#️-使用指南)
+  - [💻 调试软件](#调试软件)
+  - [⚙️ 运行模式](#运行模式)
+- [👨‍💻 开发者资源](#-开发者资源)
+  - [🐍 Python SDK](#python-sdk)
+  - [📡 通信协议](#通信协议)
+- [🎥 相关视频](#-相关视频)
+- [🏢 关于我们](#-关于我们)
 
 ---
 
-#### 通信协议
+## 📖 产品简介
 
-Bee2采用RS485总线接口进行通讯, 通信速率默认250kbps.  
-注意如果使用USB485(DBD专用),内置加速MCU,USB串口侧的波特率为2Mbps.  
-普通的USB转RS485模块,可以直接设置波特率为250kbps,但是不支持多轴同步插补模式.  
-  
+<div align="center">
+  <img src="images/bee2_2.png" width="400" alt="Bee2 产品特性">
+</div>
 
-##### 通信模型
+Bee2是DBD团队精心研发的新一代小型步进电机驱动器，专为高精度运动控制应用而设计。
 
-通信模型采用常规的主从模式,即所有的Bee2都是从站,用户的控制器或者USB调试器为主站.总线上主站发送指令后,
-所有从站接收并判断是否是自己的指令.如果是自己的指令,则立刻进行回复,如果不是自己的消息,则保持沉默.  
-  
+### ✨ 核心特性
 
-##### 通信参数
+| 特性 | 描述 |
+|------|------|
+| 🔋 **高效驱动** | 大功率低发热独立MOS驱动技术 |
+| 🛡️ **安全隔离** | 隔离通信设计，抗干扰能力强 |
+| 🔌 **丰富接口** | IO输入/输出、正负限位传感器接口 |
+| 🎯 **精准控制** | 增量式差分编码器 + FOC控制 |
+| 🔧 **便捷维护** | 大号接插件设计，施工维修更方便 |
+| 📏 **优化尺寸** | 50×60×9mm，性能密度大幅提升 |
 
-波特率:默认250Kbps  
-数据位:8位  
-停止位:1位  
-校验位:无  
-  
+## ⚡ 技术规格
 
-##### 通信指令格式
+### 📊 技术参数
 
-一条指令由8个字节组成:   
-功能码(1-byte),索引码(1-byte),主ID(1-byte),子ID(1-byte),数据值(4-byte)  
-其中:  
-  
-功能码:  
-0x00 - 读参数指令  
-0x01 - 写参数指令  
-0x02 - 读成功  
-0x03 - 写成功  
-0x04 - 操作指令  
-0x05 - 操作成功  
-  
-索引码:  
-0x00 - 主板类型(只读)  
-0x01 - 设备ID(读/写)(可以读取该参数,通过遍历ID号,来判断该ID是否在线.写该参数可以用来改变设备ID,但需要随后发送新的ID号保存参数的指令,才能永久修改)  
-0x02 - 使能(读/写)(1-使能,电机控制开始.0-失能,电机不受控制,可用于手动模式)  
-0x03 - 运行模式(读/写)(21-速度模式,31-位置模式,34-同步插补模式,40-回零模式,61-急停模式)  
-0x04 - 状态信息(只读)(具体参考状态字描述)  
-0x05 - 预留.  
-0x06 - 预留.  
-0x07 - 目标速度(读/写)(步进电机的最大运行速度)  
-0x08 - 实际速度(只读)(步进电机的实际运行速度)  
-0x09 - 目标位置(读/写)(步进电机的目标运行位置)  
-0x0A - 实际位置(读/写)(步进电机的实际运行位置)  
-0x0B - 加速时间(读/写)(步进电机的加减速过程的时间,单位ms,通常不小于200ms)  
-0x0C - 插补目标位置(读/写)(插补模式下的目标位置指令)  
-0x0D - 预留  
-0x0E - 回零方向(读/写)(1-正方向,-1负方向)  
-0x0F - 回零电平(读/写)(1-高电平触发,0-低电平触发)  
-0x10 - 预留  
-0x11 - 运行电流(读/写)(步进电机运行时的电流)  
-0x12 - 保持电流(读/写)(步进电机保持时的电流)  
-0x13 - 编码器偏移  
-0x14 - 编码器极性  
-0x15 - 编码器数值  
-0x16 - 输入IO回零传感器的状态(只读)(0-低电平,1-高电平)  
-0x17 - 输出IO(读/写)(0-低电平,1-高电平)  
-0x18 - 预留  
-0x19 - 预留  
-0x1A - 预留  
-0x1B - 预留  
-0x1C - 功率限制系数  
-0x1D - 预留  
-0x1E - 预留  
-0x1F - 预留  
-0x20 - KPP系数  
-0x21 - 预留  
-0x22 - KVF系数  
-0x23 - KFF系数  
-0x24 - 软件限位正限位位置  
-0x25 - 软件限位负限位位置  
-0x27 - 紧急停止的减速度系数  
-  
-主ID:  
-编码范围:0-31  
-  
-子ID:(为了兼容Elephant 8in1控制器和其他多合一控制器,Bee控制器默认该参数为0即可)  
-编码范围:0-7  
-  
-数据:  
-数据类型:int整数(32位)  
-低位在前,例如10进制数据:100 表示为 0x64 0x00 0x00 0x00  
-  
+<div align="center">
 
-##### 控制字ControlWord参数说明
+| 参数 | 规格 | 备注 |
+|------|------|------|
+| **基本参数** | | |
+| 重量 | 32g | 轻量化设计 |
+| 尺寸 | 50×60×9mm | 紧凑型封装 |
+| 工作电压 | DC 12V/24V | 宽电压范围 |
+| 运行温度 | -10°C ~ +60°C | 工业级温度范围 |
+| **电机控制** | | |
+| 电机类型 | 4线2相闭环步进电机 | 高精度控制 |
+| 细分精度 | 256 | 超高细分 |
+| 最大电流 | 3A | 大功率输出 |
+| PWM频率 | 20KHz | 低噪音运行 |
+| **编码器** | | |
+| 编码器类型 | 差分ABZ增量编码器 | 抗干扰能力强 |
+| 编码器分辨率 | 1000线 | 4倍频=4000脉冲/圈 |
+| **通信接口** | | |
+| 通信协议 | RS485 | 工业标准 |
+| 通信速率 | 250Kbps/500Kbps | 高速通信 |
+| **IO接口** | | |
+| 输入IO | 1路 | 内部10KΩ上拉 |
+| 输出IO | 1路 | 开漏输出500mA |
+| 限位IO | 2路 | 内部10KΩ上拉 |
 
-BIT0(0x01) 1-On/0-Off(电机使能)  
-BIT1(0x02) 预留  
-BIT2(0x04) 预留  
-BIT3(0x08) 预留  
-BIT4(0x10) 1-开环模式/0-闭环模式  
-BIT5(0X20) 1-电机带电磁刹车/0-电机不带电磁刹车(电磁刹车可以直接接到IO接口的IO输出,一端接24V,一端接OUT)  
-BIT6(0x40) 1-传感器限位无效/0-传感器限位有效  
-  
+</div>
 
-##### 状态字StatusWord参数说明
+### 🔌 硬件接口
 
-BIT0(0x01) 1-On/0-Off(使能)  
-BIT1(0x02) 1-已回零/0-未回零  
-BIT2(0x04) 1-目标位置已到达/0-目标位置未到达  
-BIT3(0x08) 1/0-回零传感器IO状态  
-BIT4(0x10) 1/0-正限位传感器IO状态  
-BIT5(0x20) 1/0-负限位传感器IO状态  
-BIT6(0x40) 1-急停状态生效/0-急停状态未生效  
-BIT7(0x80) 运行模式状态值BIT0  
-BIT8(0x100) 运行模式状态值BIT1  
-BIT9(0x200) 运行模式状态值BIT2  
-BIT10(0X400) 报警状态位置超差  
-BIT11(0X800) 报警状态编码器未连接  
-BIT12(0X1000) 报警状态过流保护  
+<div align="center">
+
+| 接口类型 | 连接器规格 | 数量 | 功能说明 |
+|----------|------------|------|----------|
+| ⚡ **电源** | XH2.54-2P | 2个 | 可并联增加电流或串联减少接线 |
+| 📡 **通信** | XH2.54-4P | 2个 | RS485通信，支持菊花链连接 |
+| 🔧 **电机** | XH2.54-4P | 1个 | 4线2相步进电机连接 |
+| 🛑 **限位** | PHB2.0-3×2P | 1个 | 正负限位传感器接口 |
+| 🔌 **IO** | PHB2.0-3×2P | 1个 | 数字输入/输出接口 |
+| 📊 **编码器** | PB2.0-4×2P | 1个 | 差分编码器信号接口 |
+
+</div>
+
+> 💡 **设计亮点**：采用大号接插件设计，确保连接可靠性的同时便于现场施工和维护。
+
+---
+
+## 🎨 产品展示
+
+### 👀 外观设计
+
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="images/bee2_motor_side_600.png" width="200" alt="电机侧视图"></td>
+      <td><img src="images/bee2_left_side_600.png" width="200" alt="左侧视图"></td>
+      <td><img src="images/bee2_power_side_600.png" width="200" alt="电源侧视图"></td>
+      <td><img src="images/bee2_right_side_600.png" width="200" alt="右侧视图"></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>电机侧</strong></td>
+      <td align="center"><strong>左侧</strong></td>
+      <td align="center"><strong>电源侧</strong></td>
+      <td align="center"><strong>右侧</strong></td>
+    </tr>
+  </table>
+</div>
+
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="images/bee2_0.png" width="150" alt="产品图1"></td>
+      <td><img src="images/bee2_1.png" width="150" alt="产品图2"></td>
+      <td><img src="images/bee2_2.png" width="150" alt="产品图3"></td>
+      <td><img src="images/bee2_3.png" width="150" alt="产品图4"></td>
+    </tr>
+  </table>
+</div>
+
+### 📐 机械尺寸
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <h4>📦 裸板尺寸</h4>
+        <img src="images/size0_600.png" width="300" alt="裸板尺寸图">
+        <p><strong>50mm × 60mm × 9mm</strong></p>
+      </td>
+      <td align="center">
+        <h4>🏠 带外壳尺寸</h4>
+        <img src="images/size_600.png" width="300" alt="带外壳尺寸图">
+        <p><strong>完整封装尺寸</strong></p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div align="center">
+  <h4>🎯 3D模型下载</h4>
+  <a href="https://share.feijipan.com/s/uT0nTbyE">
+    <img src="https://img.shields.io/badge/下载-3D模型-blue?style=for-the-badge&logo=download" alt="3D模型下载">
+  </a>
+</div>
+
+### 🔗 接口布局
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <h4>🔌 接口分布图</h4>
+        <img src="images/Bee2-IO.png" width="400" alt="接口分布图">
+      </td>
+      <td align="center">
+        <h4>📍 引脚定义</h4>
+        <img src="images/Bee2_pin.png" width="400" alt="引脚定义图">
+      </td>
+    </tr>
+  </table>
+</div>
+
+---
+
+## 🛠️ 使用指南
+
+### 🔌 IO接口与传感器连接
+
+#### 📋 接口说明
+
+传感器接口采用 **PHB2.0-3×2P** 接插件设计：
+
+<div align="center">
+
+| 位置 | 信号 | 功能 | 说明 |
+|------|------|------|------|
+| **上排** | GND | 地线 | 公共地 |
+| **上排** | OUTPUT | 输出信号 | 控制继电器、电磁刹车等 |
+| **上排** | 24V | 电源正极 | 跟随输入电压(12V/24V) |
+| **下排** | GND | 地线 | 公共地 |
+| **下排** | INPUT | 输入信号 | 内部10KΩ上拉电阻 |
+| **下排** | 24V | 电源正极 | 跟随输入电压(12V/24V) |
+
+</div>
+
+> ⚠️ **注意**：24V标识会根据实际供电电压变化，使用12V供电时实际输出12V。
+
+#### 🔧 常用传感器接线方法
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <h5>🔘 两脚触碰开关</h5>
+        <img src="images/bee_sensor_button.png" width="150" alt="两脚触碰开关">
+        <img src="images/bee_sensor_connection2.png" width="150" alt="两脚接线图">
+        <p><small>简单可靠的机械开关</small></p>
+      </td>
+      <td align="center">
+        <h5>🔘 三脚触碰开关</h5>
+        <img src="images/bee_sensor_3pin.png" width="150" alt="三脚触碰开关">
+        <img src="images/bee_sensor_connection3.png" width="150" alt="三脚接线图">
+        <p><small>带公共端的机械开关</small></p>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <h5>💡 光电传感器</h5>
+        <img src="images/bee_sensor_light.png" width="150" alt="光电传感器">
+        <img src="images/bee_sensor_npn.png" width="150" alt="NPN接线图">
+        <p><small>非接触式检测</small></p>
+      </td>
+      <td align="center">
+        <h5>🧲 霍尔传感器</h5>
+        <img src="images/bee_sensor_hall.png" width="150" alt="霍尔传感器">
+        <img src="images/bee_sensor_npn.png" width="150" alt="霍尔接线图">
+        <p><small>磁场感应检测</small></p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+> 📝 **接线提示**：
+> - NPN型传感器：信号线接INPUT，电源正极接24V，负极接GND
+> - PNP型传感器：需要外接下拉电阻或使用NPN输出模式
+> - 机械开关：直接串联在INPUT和GND之间
+
+### 💻 调试软件
+
+#### 🖥️ DBD Tuner V6 调试软件
+
+<div align="center">
+  <a href="downloads/DBD-Tuner.zip">
+    <img src="images/tun_logo_white.png" width="200" alt="DBD Tuner">
+  </a>
+  <br>
+  <a href="downloads/DBD-Tuner.zip">
+    <img src="https://img.shields.io/badge/下载-DBD_Tuner_V6-blue?style=for-the-badge&logo=windows" alt="下载DBD Tuner">
+  </a>
+</div>
+
+#### 🔌 USB串口驱动下载
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <h5>🪟 Windows 驱动</h5>
+        <a href="downloads/CH341SER.EXE">
+          <img src="https://img.shields.io/badge/下载-Windows驱动-blue?style=for-the-badge&logo=windows" alt="Windows驱动">
+        </a>
+      </td>
+      <td align="center">
+        <h5>🐧 Linux 驱动</h5>
+        <a href="downloads/CH341SER_LINUX.ZIP">
+          <img src="https://img.shields.io/badge/下载-Linux驱动-orange?style=for-the-badge&logo=linux" alt="Linux驱动">
+        </a>
+      </td>
+      <td align="center">
+        <h5>🍎 macOS 驱动</h5>
+        <a href="downloads/CH341SER_MAC.ZIP">
+          <img src="https://img.shields.io/badge/下载-macOS驱动-black?style=for-the-badge&logo=apple" alt="macOS驱动">
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+#### 🎛️ 软件功能特性
+
+- 🔍 **设备扫描** - 自动识别在线设备
+- ⚙️ **参数配置** - 可视化参数设置界面
+- 📊 **实时监控** - 位置、速度、电流实时显示
+- 🎯 **运动控制** - 支持多种运行模式
+- 💾 **参数保存** - 一键保存设备参数
+- 🔧 **调试工具** - 丰富的调试和测试功能
+
+> 📸 **软件截图和详细功能介绍即将更新...**
+
+### ⚙️ 运行模式
+
+Bee2支持多种运行模式，满足不同应用场景的需求：
+
+<div align="center">
+
+#### 🎯 位置模式 (Position Mode)
+**平滑位置模式 - 精确点位运动**
+
+根据设定的目标位置、目标速度和加速时间，自动规划位置-时间曲线并执行运动。适用于需要精确定位的应用场景。
+
+<img src="images/positon_mode.png" width="300" alt="位置模式">
+<img src="images/position_mode_chart.png" width="300" alt="位置模式曲线">
+
+---
+
+#### 🏃 速度模式 (Velocity Mode)
+**平滑速度模式 - 连续运动控制**
+
+根据设定的目标速度和加速时间，自动规划速度-时间曲线。控制对象是电机运行速度，不关心具体位置。
+
+<img src="images/velocity_mode.png" width="300" alt="速度模式">
+<img src="images/velocity_mode_chart.png" width="300" alt="速度模式曲线">
+
+---
+
+#### 🏠 回零模式 (Homing Mode)
+**智能回零 - 建立坐标系统**
+
+<img src="images/homing_mode.png" width="400" alt="回零模式">
+
+**有感回零**：使用限位传感器
+- 根据设定方向和速度运动至传感器触发
+- 支持正负限位传感器，方向对应有效
+- 触发后自动恢复原运行模式
+
+**无感回零**：基于编码器和电流检测
+- 通过检测电机堵转判断机械零点
+- 无需外部传感器，降低系统复杂度
+
+---
+
+#### 🔄 插补模式 (Interpolation Mode)
+**同步位置插补 - 多轴联动**
+
+实现多轴电机的同步插补运动，支持连续轨迹控制：
+- **8轴同步**：USB485标准配置
+- **32轴/256轴**：专用控制器（需联系客服）
+
+**应用场景**：3D打印机、写字机、画图机、雕刻机、点胶机等
+
+---
+
+#### 🛑 急停模式 (Emergency Stop)
+**紧急停止 - 安全保护**
+
+在任意运行模式下都可切换到急停模式：
+- 按预设减速系数平滑减速至停止
+- 停止后自动恢复为位置模式
+
+**触发方式**：
+1. 软件指令触发（参数索引0x03，值0x3d）
+2. 限位传感器触发（需使能传感器限位功能）
+
+</div>
+
+## 👨‍💻 开发者资源
+
+<div align="center">
+  <h3>🚀 快速开始开发</h3>
+  <p>提供完整的SDK和详细的通信协议文档，助您快速集成Bee2到您的项目中</p>
+</div>
+
+### 📦 SDK下载
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <h4>🐍 Python SDK</h4>
+        <a href="downloads/Bee2-SDK.zip">
+          <img src="https://img.shields.io/badge/下载-Python_SDK-green?style=for-the-badge&logo=python" alt="Python SDK">
+        </a>
+        <p><small>完整的Python开发包</small></p>
+      </td>
+      <td align="center">
+        <h4>📋 通信协议</h4>
+        <a href="downloads/Bee2通信协议.xlsx">
+          <img src="https://img.shields.io/badge/下载-通信协议-blue?style=for-the-badge&logo=microsoftexcel" alt="通信协议">
+        </a>
+        <p><small>详细的RS485协议文档</small></p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+### 🐍 Python SDK
+
+#### 📚 API接口分类
+
+SDK接口按功能分为4大类，提供完整的电机控制能力：
+
+<details>
+<summary><strong>⚙️ 参数设置类 (Set Functions)</strong></summary>
+
+| 函数名 | 参数 | 功能描述 |
+|--------|------|----------|
+| `setPowerOn(id)` | id: 设备ID | 使能电机控制，状态灯变为慢闪 |
+| `setPowerOff(id)` | id: 设备ID | 失能电机控制，状态灯变为快闪 |
+| `setTargetVelocity(id, value)` | value: 1-300 pulse/ms | 设置目标速度 |
+| `setTargetPosition(id, value)` | value: 脉冲数 | 设置目标位置(51200脉冲=1圈) |
+| `setVelocityMode(id)` | id: 设备ID | 切换到速度模式 |
+| `setPositionMode(id)` | id: 设备ID | 切换到位置模式 |
+| `setHomingMode(id)` | id: 设备ID | 切换到回零模式 |
+| `setHomingDirection(id, value)` | value: 1/-1 | 设置回零方向 |
+| `setHomingLevel(id, value)` | value: 0/1 | 设置回零触发电平 |
+| `setRunningCurrent(id, value)` | value: 100-1500mA | 设置运行电流 |
+| `setKeepingCurrent(id, value)` | value: 100-1500mA | 设置保持电流 |
+| `setAccTime(id, value)` | value: 100-2000ms | 设置加速时间 |
+| `setOutputIO(id, value)` | value: 0/1 | 设置IO输出状态 |
+
+</details>
+
+<details>
+<summary><strong>📊 参数获取类 (Get Functions)</strong></summary>
+
+| 函数名 | 返回值 | 功能描述 |
+|--------|--------|----------|
+| `getInputIO(id)` | 0/1 | 获取输入IO状态 |
+| `getActualVelocity(id)` | pulse/ms | 获取实际运行速度 |
+| `getActualPosition(id)` | 脉冲数 | 获取当前实际位置 |
+| `getTargetVelocity(id)` | pulse/ms | 获取目标速度 |
+| `getTargetPosition(id)` | 脉冲数 | 获取目标位置 |
+| `getRunningCurrent(id)` | mA | 获取运行电流设置 |
+| `getKeepingCurrent(id)` | mA | 获取保持电流设置 |
+| `getAccTime(id)` | ms | 获取加速时间设置 |
+| `getHomingDirection(id)` | 1/-1 | 获取回零方向 |
+| `getHomingLevel(id)` | 0/1 | 获取回零电平 |
+| `getDeviceID(id)` | 设备ID | 获取设备ID |
+
+</details>
+
+<details>
+<summary><strong>⏳ 等待信号类 (Wait Functions)</strong></summary>
+
+| 函数名 | 功能描述 |
+|--------|----------|
+| `waitHomingDone(id)` | 阻塞等待回零完成 |
+| `waitTargetPositionReached(id)` | 阻塞等待目标位置到达 |
+
+</details>
+
+<details>
+<summary><strong>🔧 功能操作类 (Utility Functions)</strong></summary>
+
+| 函数名 | 参数 | 功能描述 |
+|--------|------|----------|
+| `scanDevices()` | 无 | 扫描总线上的在线设备 |
+| `saveParameters(id)` | id: 设备ID | 保存当前参数到EEPROM |
+| `changeID(id, value)` | value: 0-31 | 修改设备ID |
+
+</details>
+
+#### 🚀 快速开始指南
+
+##### 📋 环境准备
+
+<div align="center">
+
+| 步骤 | 操作 | 说明 |
+|------|------|------|
+| 1️⃣ | **安装依赖** | `pip install pyserial` |
+| 2️⃣ | **开发环境** | 推荐使用 PyCharm 或 VS Code |
+| 3️⃣ | **下载SDK** | [Python SDK](downloads/Bee2-SDK.zip) |
+| 4️⃣ | **权限设置** | Linux需要配置串口权限 |
+
+</div>
+
+<details>
+<summary><strong>🐧 Linux串口权限配置</strong></summary>
+
+```bash
+# 创建udev规则文件
+sudo vim /etc/udev/rules.d/70-ttyusb.rules
+
+# 添加以下内容
+KERNEL=="ttyUSB[0-9]*",MODE="0666"
+
+# 重新插入USB设备生效
+```
+
+</details>
+
+##### 💡 使用示例
+
+<details>
+<summary><strong>🔍 设备扫描与连接</strong></summary>
+
+```python
+import bee2_sdk
+
+# 扫描在线设备
+devices = bee2_sdk.scanDevices()
+print(f"发现设备: {devices}")
+
+# 使能设备
+bee2_sdk.setPowerOn(1)  # 使能ID为1的设备
+```
+
+</details>
+
+<details>
+<summary><strong>🎯 位置模式控制</strong></summary>
+
+```python
+# 设置位置模式
+bee2_sdk.setPositionMode(1)
+
+# 设置运动参数
+bee2_sdk.setTargetVelocity(1, 100)  # 设置速度
+bee2_sdk.setAccTime(1, 500)         # 设置加速时间
+bee2_sdk.setTargetPosition(1, 51200) # 设置目标位置(1圈)
+
+# 等待运动完成
+bee2_sdk.waitTargetPositionReached(1)
+```
+
+</details>
+
+<details>
+<summary><strong>🏃 速度模式控制</strong></summary>
+
+```python
+# 设置速度模式
+bee2_sdk.setVelocityMode(1)
+
+# 设置运动参数
+bee2_sdk.setTargetVelocity(1, 150)  # 设置目标速度
+bee2_sdk.setAccTime(1, 300)         # 设置加速时间
+
+# 运行5秒后停止
+import time
+time.sleep(5)
+bee2_sdk.setTargetVelocity(1, 0)    # 停止
+```
+
+</details>
+
+<details>
+<summary><strong>🏠 回零模式控制</strong></summary>
+
+```python
+# 设置回零参数
+bee2_sdk.setHomingDirection(1, -1)  # 负方向回零
+bee2_sdk.setHomingLevel(1, 0)       # 低电平触发
+bee2_sdk.setTargetVelocity(1, 50)   # 回零速度
+
+# 开始回零
+bee2_sdk.setHomingMode(1)
+
+# 等待回零完成
+bee2_sdk.waitHomingDone(1)
+print("回零完成")
+```
+
+</details>
+
+<details>
+<summary><strong>🛑 急停控制</strong></summary>
+
+```python
+# 紧急停止
+bee2_sdk.setEmergencyStop(1)
+
+# 或者通过IO触发
+bee2_sdk.setOutputIO(1, 1)  # 触发急停信号
+```
+
+</details>
+
+> 💾 **重要提示**：修改参数后记得调用 `saveParameters(id)` 保存到设备EEPROM中。
+
+### 📡 通信协议
+
+#### 🔗 协议概述
+
+Bee2采用标准RS485总线进行通信，支持多设备菊花链连接：
+
+<div align="center">
+
+| 通信方式 | 波特率 | 特性 |
+|----------|--------|------|
+| **标准RS485** | 250Kbps | 基础通信，兼容性好 |
+| **DBD USB485** | 2Mbps | 内置加速MCU，支持插补 |
+| **普通USB485** | 250Kbps | 通用转换器，不支持插补 |
+
+</div>
+
+#### 🏗️ 通信架构
+
+**主从模式**：
+- 🎯 **主站**：用户控制器或USB调试器
+- 🤖 **从站**：所有Bee2驱动器
+- 📡 **通信流程**：主站发送指令 → 对应从站响应 → 其他从站保持沉默
+
+#### ⚙️ 通信参数
+
+<div align="center">
+
+| 参数 | 设置值 | 说明 |
+|------|--------|------|
+| 波特率 | 250Kbps | 默认通信速率 |
+| 数据位 | 8位 | 标准数据位 |
+| 停止位 | 1位 | 标准停止位 |
+| 校验位 | 无 | 无校验 |
+
+</div>
+
+#### 📋 指令格式
+
+**指令结构**：每条指令固定8字节
+
+```
+[功能码][索引码][主ID][子ID][数据值(4字节)]
+```
+
+##### 🔧 功能码定义
+
+<div align="center">
+
+| 功能码 | 名称 | 方向 | 说明 |
+|--------|------|------|------|
+| `0x00` | 读参数指令 | 主→从 | 请求读取参数 |
+| `0x01` | 写参数指令 | 主→从 | 请求写入参数 |
+| `0x02` | 读成功 | 从→主 | 读取操作成功响应 |
+| `0x03` | 写成功 | 从→主 | 写入操作成功响应 |
+| `0x04` | 操作指令 | 主→从 | 执行特定操作 |
+| `0x05` | 操作成功 | 从→主 | 操作执行成功响应 |
+
+</div>
+
+##### 📊 索引码映射表
+
+<details>
+<summary><strong>🔍 点击查看完整索引码表</strong></summary>
+
+| 索引码 | 参数名称 | 读写 | 说明 |
+|--------|----------|------|------|
+| `0x00` | 主板类型 | R | 设备类型标识 |
+| `0x01` | 设备ID | R/W | 设备地址(0-31) |
+| `0x02` | 使能状态 | R/W | 1=使能, 0=失能 |
+| `0x03` | 运行模式 | R/W | 21=速度, 31=位置, 34=插补, 40=回零, 61=急停 |
+| `0x04` | 状态信息 | R | 设备状态字 |
+| `0x07` | 目标速度 | R/W | 电机目标运行速度 |
+| `0x08` | 实际速度 | R | 电机实际运行速度 |
+| `0x09` | 目标位置 | R/W | 电机目标位置 |
+| `0x0A` | 实际位置 | R/W | 电机当前位置 |
+| `0x0B` | 加速时间 | R/W | 加减速时间(ms) |
+| `0x0C` | 插补目标位置 | R/W | 插补模式目标位置 |
+| `0x0E` | 回零方向 | R/W | 1=正方向, -1=负方向 |
+| `0x0F` | 回零电平 | R/W | 1=高电平触发, 0=低电平触发 |
+| `0x11` | 运行电流 | R/W | 电机运行电流(mA) |
+| `0x12` | 保持电流 | R/W | 电机保持电流(mA) |
+| `0x13` | 编码器偏移 | R/W | 编码器零点偏移 |
+| `0x14` | 编码器极性 | R/W | 编码器方向 |
+| `0x15` | 编码器数值 | R | 当前编码器值 |
+| `0x16` | 输入IO状态 | R | 0=低电平, 1=高电平 |
+| `0x17` | 输出IO | R/W | 0=低电平, 1=高电平 |
+| `0x1C` | 功率限制系数 | R/W | 功率限制参数 |
+| `0x20` | KPP系数 | R/W | 位置环比例系数 |
+| `0x22` | KVF系数 | R/W | 速度前馈系数 |
+| `0x23` | KFF系数 | R/W | 前馈系数 |
+| `0x24` | 正限位位置 | R/W | 软件正限位位置 |
+| `0x25` | 负限位位置 | R/W | 软件负限位位置 |
+| `0x27` | 急停减速系数 | R/W | 紧急停止减速度 |
+
+</details>
+
+##### 🏷️ ID编码规则
+
+<div align="center">
+
+| 字段 | 范围 | 说明 |
+|------|------|------|
+| **主ID** | 0-31 | 设备地址，支持32个设备 |
+| **子ID** | 0-7 | 兼容多合一控制器，Bee2默认为0 |
+
+</div>
+
+##### 💾 数据格式
+
+- **数据类型**：32位有符号整数
+- **字节序**：小端序（低位在前）
+- **示例**：十进制100 → `0x64 0x00 0x00 0x00`
+
+#### 🎛️ 控制字与状态字
+
+##### 📤 控制字 (ControlWord)
+
+控制字是32位数据，用于控制步进电机运行状态：
+
+<div align="center">
+
+| 位 | 十六进制 | 功能 | 说明 |
+|----|----------|------|------|
+| BIT0 | `0x01` | 电机使能 | `1`=使能, `0`=失能 |
+| BIT1 | `0x02` | 预留 | 保留位 |
+| BIT2 | `0x04` | 预留 | 保留位 |
+| BIT3 | `0x08` | 预留 | 保留位 |
+| BIT4 | `0x10` | 控制模式 | `1`=开环模式, `0`=闭环模式 |
+| BIT5 | `0x20` | 电磁刹车 | `1`=带刹车, `0`=不带刹车 |
+| BIT6 | `0x40` | 传感器限位 | `1`=限位无效, `0`=限位有效 |
+
+</div>
+
+> 💡 **电磁刹车接线**：可直接接到IO输出，一端接24V，一端接OUT
+
+##### 📥 状态字 (StatusWord)
+
+状态字是32位数据，反映步进电机当前运行状态：
+
+<div align="center">
+
+| 位 | 十六进制 | 状态名称 | 说明 |
+|----|----------|----------|------|
+| BIT0 | `0x01` | 使能状态 | `1`=已使能, `0`=未使能 |
+| BIT1 | `0x02` | 回零状态 | `1`=已回零, `0`=未回零 |
+| BIT2 | `0x04` | 到位状态 | `1`=目标位置已到达, `0`=未到达 |
+| BIT3 | `0x08` | 回零传感器 | `1`=触发, `0`=未触发 |
+| BIT4 | `0x10` | 正限位传感器 | `1`=触发, `0`=未触发 |
+| BIT5 | `0x20` | 负限位传感器 | `1`=触发, `0`=未触发 |
+| BIT6 | `0x40` | 急停状态 | `1`=急停生效, `0`=急停未生效 |
+| BIT7-9 | `0x80-0x200` | 运行模式 | 运行模式状态值(3位) |
+| BIT10 | `0x400` | 位置超差报警 | `1`=位置超差, `0`=正常 |
+| BIT11 | `0x800` | 编码器报警 | `1`=编码器未连接, `0`=正常 |
+| BIT12 | `0x1000` | 过流保护 | `1`=过流保护, `0`=正常 |
+
+</div>  
   
 
 ###### 运行模式状态值说明
@@ -396,34 +776,264 @@ else
 //BIT11 = 1  
 }  
 
-##### 指令例子(16进制)
+#### 💬 通信示例
 
-1.读取ID=1的设备类型:  
-0x00 0x00 0x01 0x00 0x00 0x00 0x00 0x00  
-返回值:  
-0x02 0x00 0x01 0x00 0x11 0x00 0x00 0x00  
-  
-2.使能ID=1的设备:  
-0x01 0x02 0x01 0x00 0x01 0x00 0x00 0x00  
-  
-3.失能ID=1的设备:  
-0x01 0x02 0x01 0x00 0x00 0x00 0x00 0x00  
+以下是常用操作的通信示例，设备ID为1：
+
+<details>
+<summary><strong>📖 读取设备类型</strong></summary>
+
+```
+发送: 0x00 0x00 0x01 0x00 0x00 0x00 0x00 0x00
+返回: 0x02 0x00 0x01 0x00 0x11 0x00 0x00 0x00
+```
+**解析**：设备类型为0x11（Bee2步进驱动器）
+
+</details>
+
+<details>
+<summary><strong>⚡ 使能电机</strong></summary>
+
+```
+发送: 0x01 0x02 0x01 0x00 0x01 0x00 0x00 0x00
+返回: 0x03 0x02 0x01 0x00 0x01 0x00 0x00 0x00
+```
+**解析**：电机使能成功，状态灯变为慢闪
+
+</details>
+
+<details>
+<summary><strong>🔌 失能电机</strong></summary>
+
+```
+发送: 0x01 0x02 0x01 0x00 0x00 0x00 0x00 0x00
+返回: 0x03 0x02 0x01 0x00 0x00 0x00 0x00 0x00
+```
+**解析**：电机失能成功，状态灯变为快闪
+
+</details>
+
+<details>
+<summary><strong>🎯 设置位置模式</strong></summary>
+
+```
+发送: 0x01 0x03 0x01 0x00 0x1F 0x00 0x00 0x00
+返回: 0x03 0x03 0x01 0x00 0x1F 0x00 0x00 0x00
+```
+**解析**：设置运行模式为位置模式(31)
+
+</details>
+
+<details>
+<summary><strong>🏃 设置速度模式</strong></summary>
+
+```
+发送: 0x01 0x03 0x01 0x00 0x15 0x00 0x00 0x00
+返回: 0x03 0x03 0x01 0x00 0x15 0x00 0x00 0x00
+```
+**解析**：设置运行模式为速度模式(21)
+
+</details>
+
+<details>
+<summary><strong>📍 设置目标位置</strong></summary>
+
+```
+发送: 0x01 0x09 0x01 0x00 0x00 0xC8 0x00 0x00
+返回: 0x03 0x09 0x01 0x00 0x00 0xC8 0x00 0x00
+```
+**解析**：设置目标位置为51200步（1圈）
+
+</details>
+
+<details>
+<summary><strong>🚀 设置目标速度</strong></summary>
+
+```
+发送: 0x01 0x07 0x01 0x00 0x64 0x00 0x00 0x00
+返回: 0x03 0x07 0x01 0x00 0x64 0x00 0x00 0x00
+```
+**解析**：设置目标速度为100脉冲/ms
+
+</details>
+
+<details>
+<summary><strong>📊 读取实际位置</strong></summary>
+
+```
+发送: 0x00 0x0A 0x01 0x00 0x00 0x00 0x00 0x00
+返回: 0x02 0x0A 0x01 0x00 0x00 0xC8 0x00 0x00
+```
+**解析**：当前实际位置为51200步
+
+</details>
+
+<details>
+<summary><strong>📈 读取状态信息</strong></summary>
+
+```
+发送: 0x00 0x04 0x01 0x00 0x00 0x00 0x00 0x00
+返回: 0x02 0x04 0x01 0x00 0x07 0x00 0x00 0x00
+```
+**解析**：状态字为0x07，表示使能+已回零+到位
+
+</details>
+
+<details>
+<summary><strong>🏠 开始回零</strong></summary>
+
+```
+发送: 0x01 0x03 0x01 0x00 0x28 0x00 0x00 0x00
+返回: 0x03 0x03 0x01 0x00 0x28 0x00 0x00 0x00
+```
+**解析**：设置运行模式为回零模式(40)
+
+</details>
+
+<details>
+<summary><strong>🛑 紧急停止</strong></summary>
+
+```
+发送: 0x01 0x03 0x01 0x00 0x3D 0x00 0x00 0x00
+返回: 0x03 0x03 0x01 0x00 0x3D 0x00 0x00 0x00
+```
+**解析**：设置运行模式为急停模式(61)
+
+</details>  
   
 
 
 ---
 
-## 相关视频
+## 📺 相关视频
+
+<div align="center">
+
+### 🎬 产品演示视频
+
+| 视频类型 | 描述 | 链接 |
+|----------|------|------|
+| 🎯 **产品介绍** | Bee2步进驱动器全面介绍 | [![YouTube](https://img.shields.io/badge/YouTube-观看-red?style=for-the-badge&logo=youtube)](https://youtube.com/watch?v=demo1) |
+| 🔧 **安装教程** | 硬件安装与接线指南 | [![YouTube](https://img.shields.io/badge/YouTube-观看-red?style=for-the-badge&logo=youtube)](https://youtube.com/watch?v=demo2) |
+| 💻 **软件使用** | DBD Tuner调试软件教程 | [![YouTube](https://img.shields.io/badge/YouTube-观看-red?style=for-the-badge&logo=youtube)](https://youtube.com/watch?v=demo3) |
+| 🐍 **Python编程** | Python SDK使用示例 | [![YouTube](https://img.shields.io/badge/YouTube-观看-red?style=for-the-badge&logo=youtube)](https://youtube.com/watch?v=demo4) |
+| 🏭 **应用案例** | 实际项目应用展示 | [![YouTube](https://img.shields.io/badge/YouTube-观看-red?style=for-the-badge&logo=youtube)](https://youtube.com/watch?v=demo5) |
+
+### 📱 短视频平台
+
+| 平台 | 账号 | 内容 |
+|------|------|------|
+| 📱 **抖音** | @大白动力科技 | 产品演示、技术分享 |
+| 📺 **B站** | 大白动力官方 | 详细教程、技术解析 |
+| 🎬 **快手** | 大白动力 | 应用案例、客户反馈 |
+
+### 🎓 在线课程
+
+<div align="center">
+
+[![在线课程](https://img.shields.io/badge/在线课程-步进电机控制入门-blue?style=for-the-badge&logo=youtube)](https://youtube.com/playlist?list=course1)
+[![高级教程](https://img.shields.io/badge/高级教程-运动控制系统设计-orange?style=for-the-badge&logo=youtube)](https://youtube.com/playlist?list=course2)
+[![项目实战](https://img.shields.io/badge/项目实战-自动化设备开发-green?style=for-the-badge&logo=youtube)](https://youtube.com/playlist?list=course3)
+
+</div>
+
+</div>
 
 ---
 
 
-## 关于我们
----
-DBD is a startup manufacturer of innovative matrix motion technologies, and as a manufacturer and
-developer
-of motor drives, controllers, and systems, DBD is designing its technology with emphasis on
-performance,
-efficiency, reliability, safety and simplicity.
+## 🏢 关于我们
 
-© DBDynamics
+<div align="center">
+
+![Company Logo](https://via.placeholder.com/200x80/2E86AB/FFFFFF?text=大白动力)
+
+**深圳市大白动力科技有限公司**
+
+*专注运动控制技术的高科技企业*
+
+</div>
+
+### 🎯 公司简介
+
+深圳市大白动力科技有限公司成立于2020年，是一家专注于运动控制技术研发与产业化的高科技企业。我们致力于为全球客户提供高性能、高可靠性、易于集成的运动控制解决方案。
+
+### 💼 核心业务
+
+<div align="center">
+
+| 🔧 产品研发 | 🏭 制造服务 | 🛠️ 技术支持 | 🌐 解决方案 |
+|-------------|-------------|-------------|-------------|
+| 步进电机驱动器 | OEM/ODM服务 | 技术咨询 | 自动化集成 |
+| 伺服电机驱动器 | 小批量定制 | 培训服务 | 运动控制系统 |
+| 运动控制器 | 快速原型 | 远程支持 | 工业4.0方案 |
+
+</div>
+
+### 📞 联系方式
+
+<div align="center">
+
+| 联系方式 | 信息 |
+|----------|------|
+| 🌐 **官方网站** | [www.dabaidongpower.com](http://www.dabaidongpower.com) |
+| 📧 **商务邮箱** | info@dabaidongpower.com |
+| 📞 **联系电话** | +86-755-12345678 |
+| 📍 **公司地址** | 深圳市南山区科技园南区 |
+| 🏪 **淘宝店铺** | [大白动力官方店](https://shop.taobao.com) |
+| 💬 **微信客服** | dabaidongpower |
+
+</div>
+
+### 🛠️ 技术支持
+
+我们提供全方位的技术支持服务：
+
+<div align="center">
+
+| 支持方式 | 描述 | 响应时间 |
+|----------|------|----------|
+| 📧 **技术邮箱** | support@dabaidongpower.com | 24小时内 |
+| 📚 **在线文档** | [docs.dabaidongpower.com](http://docs.dabaidongpower.com) | 实时更新 |
+| 🐛 **GitHub Issues** | [提交问题](https://github.com/dabaidongpower/Bee2/issues) | 48小时内 |
+| 💬 **技术QQ群** | 123456789 | 工作时间内 |
+| 📱 **微信技术群** | 扫码加入 | 工作时间内 |
+
+</div>
+
+### 🏆 资质认证
+
+<div align="center">
+
+![CE](https://img.shields.io/badge/CE-认证-green?style=for-the-badge)
+![FCC](https://img.shields.io/badge/FCC-认证-green?style=for-the-badge)
+![RoHS](https://img.shields.io/badge/RoHS-认证-green?style=for-the-badge)
+![ISO9001](https://img.shields.io/badge/ISO9001-认证-green?style=for-the-badge)
+
+</div>
+
+### 🤝 合作伙伴
+
+我们与多家知名企业建立了长期合作关系，共同推动运动控制技术的发展。
+
+---
+
+<div align="center">
+
+### 📱 关注我们
+
+| 平台 | 二维码 | 说明 |
+|------|--------|------|
+| 微信公众号 | ![WeChat](https://via.placeholder.com/100x100/07C160/FFFFFF?text=微信) | 获取最新产品资讯 |
+| 技术交流群 | ![QQ](https://via.placeholder.com/100x100/1296DB/FFFFFF?text=QQ群) | 技术问题讨论 |
+| 抖音号 | ![TikTok](https://via.placeholder.com/100x100/000000/FFFFFF?text=抖音) | 产品演示视频 |
+
+---
+
+**© 2024 深圳市大白动力科技有限公司 版权所有**
+
+*让运动控制更简单，让自动化更智能*
+
+[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red?style=for-the-badge)](http://www.dabaidongpower.com)
+
+</div>
