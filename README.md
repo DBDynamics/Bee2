@@ -923,9 +923,9 @@ else
 
 | 平台 | 账号 | 内容 |
 |------|------|------|
-| 📱 **抖音** | @大白动力科技 | 产品演示、技术分享 |
-| 📺 **B站** | 大白动力官方 | 详细教程、技术解析 |
-| 🎬 **快手** | 大白动力 | 应用案例、客户反馈 |
+| 📱 **抖音** | @大博动力科技 | 产品演示、技术分享 |
+| 📺 **B站** | 大博动力官方 | 详细教程、技术解析 |
+| 🎬 **快手** | 大博动力 | 应用案例、客户反馈 |
 
 ### 🎓 在线课程
 
@@ -941,99 +941,8 @@ else
 
 ---
 
+## 🏢 关于 DBD
 
-## 🏢 关于我们
+DBD is a startup manufacturer of innovative matrix motion technologies, and as a manufacturer and developer of motor drives, controllers, and systems, DBD is designing its technology with emphasis on performance, efficiency, reliability, safety and simplicity.
 
-<div align="center">
-
-![Company Logo](https://via.placeholder.com/200x80/2E86AB/FFFFFF?text=大白动力)
-
-**深圳市大白动力科技有限公司**
-
-*专注运动控制技术的高科技企业*
-
-</div>
-
-### 🎯 公司简介
-
-深圳市大白动力科技有限公司成立于2020年，是一家专注于运动控制技术研发与产业化的高科技企业。我们致力于为全球客户提供高性能、高可靠性、易于集成的运动控制解决方案。
-
-### 💼 核心业务
-
-<div align="center">
-
-| 🔧 产品研发 | 🏭 制造服务 | 🛠️ 技术支持 | 🌐 解决方案 |
-|-------------|-------------|-------------|-------------|
-| 步进电机驱动器 | OEM/ODM服务 | 技术咨询 | 自动化集成 |
-| 伺服电机驱动器 | 小批量定制 | 培训服务 | 运动控制系统 |
-| 运动控制器 | 快速原型 | 远程支持 | 工业4.0方案 |
-
-</div>
-
-### 📞 联系方式
-
-<div align="center">
-
-| 联系方式 | 信息 |
-|----------|------|
-| 🌐 **官方网站** | [www.dabaidongpower.com](http://www.dabaidongpower.com) |
-| 📧 **商务邮箱** | info@dabaidongpower.com |
-| 📞 **联系电话** | +86-755-12345678 |
-| 📍 **公司地址** | 深圳市南山区科技园南区 |
-| 🏪 **淘宝店铺** | [大白动力官方店](https://shop.taobao.com) |
-| 💬 **微信客服** | dabaidongpower |
-
-</div>
-
-### 🛠️ 技术支持
-
-我们提供全方位的技术支持服务：
-
-<div align="center">
-
-| 支持方式 | 描述 | 响应时间 |
-|----------|------|----------|
-| 📧 **技术邮箱** | support@dabaidongpower.com | 24小时内 |
-| 📚 **在线文档** | [docs.dabaidongpower.com](http://docs.dabaidongpower.com) | 实时更新 |
-| 🐛 **GitHub Issues** | [提交问题](https://github.com/dabaidongpower/Bee2/issues) | 48小时内 |
-| 💬 **技术QQ群** | 123456789 | 工作时间内 |
-| 📱 **微信技术群** | 扫码加入 | 工作时间内 |
-
-</div>
-
-### 🏆 资质认证
-
-<div align="center">
-
-![CE](https://img.shields.io/badge/CE-认证-green?style=for-the-badge)
-![FCC](https://img.shields.io/badge/FCC-认证-green?style=for-the-badge)
-![RoHS](https://img.shields.io/badge/RoHS-认证-green?style=for-the-badge)
-![ISO9001](https://img.shields.io/badge/ISO9001-认证-green?style=for-the-badge)
-
-</div>
-
-### 🤝 合作伙伴
-
-我们与多家知名企业建立了长期合作关系，共同推动运动控制技术的发展。
-
----
-
-<div align="center">
-
-### 📱 关注我们
-
-| 平台 | 二维码 | 说明 |
-|------|--------|------|
-| 微信公众号 | ![WeChat](https://via.placeholder.com/100x100/07C160/FFFFFF?text=微信) | 获取最新产品资讯 |
-| 技术交流群 | ![QQ](https://via.placeholder.com/100x100/1296DB/FFFFFF?text=QQ群) | 技术问题讨论 |
-| 抖音号 | ![TikTok](https://via.placeholder.com/100x100/000000/FFFFFF?text=抖音) | 产品演示视频 |
-
----
-
-**© 2024 深圳市大白动力科技有限公司 版权所有**
-
-*让运动控制更简单，让自动化更智能*
-
-[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red?style=for-the-badge)](http://www.dabaidongpower.com)
-
-</div>
+DBD是一家专注于创新矩阵运动技术的初创制造商，作为电机驱动器、控制器和系统的制造商和开发商，DBD在设计技术时注重性能、效率、可靠性、安全性和简洁性。
